@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "Roblox_Studio": {
+      "command": "cmd.exe",
+      "args": ["/c", "cd /d %LOCALAPPDATA%\\Roblox && .\\mcp.bat"],
+      "includeTools": [
+        "search_game_tree", "inspect_instance",
+        "script_grep", "script_search", "script_read",
+        "get_console_output", "get_studio_state", "start_stop_play",
+        "list_roblox_studios", "subagent", "skill"
+      ]
+    }
+  }
+}
