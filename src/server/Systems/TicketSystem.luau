@@ -20,6 +20,11 @@ type ShiftSummary = Types.ShiftSummary
 
 local TicketSystem = {}
 
+-- Stub signal: legacy Studio-only scripts (PhoneLinkSystem/DecisionRewards) expect
+-- TicketSystem.Decision to exist and crash on require if it doesn't. Those scripts are
+-- disabled, but this keeps TicketSystem safe to require even if one gets re-enabled.
+TicketSystem.Decision = Instance.new("BindableEvent").Event
+
 local function getQuotaForDay(day: number): Quota
 	local quotas = Config.DAY_QUOTAS
 	local entry = quotas[math.clamp(day, 1, #quotas)]
