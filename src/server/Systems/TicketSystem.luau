@@ -244,6 +244,30 @@ local function advanceDay(): ()
 	broadcastState()
 end
 
+local STAGE_TIERS: { [string]: number } = {
+	BakeryLevel = 1,
+	GameCompanyLevel = 2,
+	PulseLogisticsLevel = 3,
+	OmniHealthLevel = 4,
+	DefenseCommandLevel = 5,
+}
+
+-- Called by the lobby when a party starts: jump to that level's first shift.
+function TicketSystem.StartSession(levelIndex: number): ()
+	local level = Config.LEVELS[levelIndex]
+	if not level then
+		return
+	end
+	Workspace:SetAttribute("HelpDeskLevel", levelIndex)
+	Workspace:SetAttribute("HelpDeskActiveStage", level.stage)
+	currentDay = ((STAGE_TIERS[level.stage] or 1) - 1) * 5 + 1
+	quota = getQuotaForDay(currentDay)
+	phase = "Lobby"
+	tickets = {}
+	rejectedTickets = {}
+	broadcastState()
+end
+
 function TicketSystem.init(): ()
 	Workspace:SetAttribute("HelpDeskActiveStage", "BakeryLevel")
 
@@ -269,6 +293,11 @@ function TicketSystem.init(): ()
 	nextDay = Instance.new("RemoteEvent")
 	nextDay.Name = "NextDay"
 	nextDay.Parent = remotesFolder
+
+	-- The lobby (SessionService) waits for this remote before it starts.
+	local travelToLevel = Instance.new("RemoteEvent")
+	travelToLevel.Name = "TravelToLevel"
+	travelToLevel.Parent = remotesFolder
 
 	submitDecision.OnServerEvent:Connect(
 		function(player: Player, ticketId: unknown, decision: unknown)

@@ -18,6 +18,23 @@ return table.freeze({
 	-- Uploaded directly (not the catalog decal id, which failed to load in this place).
 	WALLPAPER_ASSET_ID = "rbxassetid://125725714752013",
 
+	-- Restored from the lobby system's Config (it was overwritten by Rojo sync).
+	LEVELS = {
+		{ stage = "BakeryLevel", name = "The Daily Loaf", entrance = Vector3.new(119.3, 4, 44.5) },
+		{ stage = "GameCompanyLevel", name = "Nova Games", entrance = Vector3.new(12, 4, -28) },
+		{ stage = "OmniHealthLevel", name = "OmniHealth", entrance = Vector3.new(372, 4, -42) },
+		{
+			stage = "PulseLogisticsLevel",
+			name = "Pulse Logistics",
+			entrance = Vector3.new(193, 4, -51),
+		},
+		{
+			stage = "DefenseCommandLevel",
+			name = "Defense & Aerospace Command",
+			entrance = Vector3.new(40, 4, 465),
+		},
+	},
+
 	DAY_QUOTAS = {
 		{ minProcessed = 5, minScams = 2 },
 		{ minProcessed = 6, minScams = 2 },
