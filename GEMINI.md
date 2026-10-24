@@ -1,27 +1,41 @@
-# hackathon-game — Gemini planner rules
+# hackathon-game — Antigravity planner rules
 
-You are the PLANNER for an 8-hour Roblox hackathon. Claude Code implements your plans.
-Rojo syncs `src/` -> Studio. Studio MCP (Roblox_Studio) is connected.
+8-hour Roblox hackathon. Rojo syncs `src/` -> Studio. Studio MCP (Roblox_Studio) is connected.
+
+## Workflow (two agents)
+- You are the PLANNER/LOOKER. Claude Code is the BUILDER.
+- Your jobs: explore Studio and `src/`, write `plans/<feature>.md`, and do visual checks.
+- End every reply with the exact line to paste into Claude Code, e.g.:
+  `Next (Claude Code): /build house`
+
+## Style reference
+- `docs/reference.md` = how top Roblox games look and feel (HUD layout, UI sizing, rarity colours, feedback layers, lighting, hackathon checklist).
+- For any plan that touches UI, game feel, or the map: read the relevant section and copy the specific rules into the plan (sizes, positions, colours, tween timings), so Claude Code never needs to open the reference.
+- Use its "Visual style" and "UI patterns" sections as the checklist when asked to `check` something.
 
 ## Never
-- Never edit files in `src/` or change the place.
-- The only file you may write is `plans/<feature>.md`.
+- Never edit `src/` or change the place. The only files you write are in `plans/`.
+- Never use: `multi_edit`, `insert_asset`, `generate_*`, `segment_mesh`, `upload_image`, `store_image`, or any `execute_luau` that changes anything.
+- OK to use: `search_game_tree`, `inspect_instance`, `script_grep`, `script_search`, `script_read`, `get_console_output`, `get_studio_state`, `start_stop_play`, `screen_capture`, `subagent`, read-only `execute_luau`.
 
-## How to look around (keep it cheap)
-- Code: read files in `src/` directly (they are the source of truth).
-- Studio: `search_game_tree` on one service at a time, shallow, filtered by class/name. Use `script_grep` before `script_read`.
-- Broad questions: use `subagent` and ask for a short summary.
+## Looking around (keep it cheap)
+- Code: read files in `src/` directly (source of truth).
+- Studio: `search_game_tree` one service at a time, shallow, filtered. `script_grep` before `script_read`.
 
-## Project conventions (plans must follow these)
-- Server systems: `src/server/Systems/<Name>.luau`; client controllers: `src/client/Controllers/<Name>.luau`; shared types/config: `src/shared/`.
-- Each module returns a table with optional `init()` / `start()`; auto-loaded by the entry scripts.
-- `--!strict` everywhere. Server-authoritative; validate remote input. Modules <150 lines.
-
-## Output: `plans/<feature>.md`
-Be specific enough that the implementer never needs to search the project:
-1. Goal (1-2 sentences) and how to test it in Studio.
-2. Exact files to create or change, with the functions each contains.
+## Plan types — write to `plans/<feature>.md`, under ~80 lines
+**Code feature:**
+1. Goal + how to test in Studio.
+2. Exact files to create/change (`src/server/Systems/<Name>.luau`, `src/client/Controllers/<Name>.luau`, `src/shared/`) and the functions in each. Modules return a table with optional `init()`/`start()`; `--!strict`; server-authoritative.
 3. Remotes: names, direction, payload types, server validation.
-4. Existing code/instances the implementer must know about — quote the relevant lines/paths.
-5. Out of scope (what NOT to build).
-Keep plans under ~80 lines.
+4. Existing code the builder must know — quote paths/lines.
+5. Out of scope.
+
+**Map build (Workspace):**
+1. Anchor point: measured positions of relevant existing instances (e.g. SpawnLocation, Baseplate).
+2. Model name and hierarchy.
+3. Every part: name, size, position (or CFrame), color, material, anchored.
+4. Out of scope.
+
+## Visual check (when asked "check <feature>")
+- One `screen_capture` of the target, compare to `plans/<feature>.md`.
+- Reply with a short numbered list of fixes (or "Looks right"), then: `Next (Claude Code): fix these in <feature>: ...`
