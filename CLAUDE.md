@@ -9,6 +9,9 @@
 - No plan and the task needs broad exploration (more than a few searches)? Stop and suggest: "Ask agy to plan this" with a one-line prompt for it.
 - End each task with one line: what changed + `Next:` (e.g. "ask agy to check plans/house.md visually", or "commit").
 
+## The game: Zero Trust
+- Design doc: `docs/zero-trust.md` (source of truth). Research: `docs/scam-game.md`. agy copies what you need into each plan, so read these only if a plan leaves something out.
+
 ## Style reference
 - `docs/reference.md` = how top Roblox games look and feel (HUD layout, UI sizing, rarity colours, feedback layers, lighting).
 - Read only the section you need, and only for UI, game-feel, or map/lighting work. Don't load it for pure logic.
